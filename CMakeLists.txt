@@ -6,7 +6,7 @@ set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMakePredefinedTargets"
 # Project.
 ################################################################################
 
-project(CMakeExample VERSION 0.1.0 LANGUAGES CXX)
+project(CommonProject VERSION 0.1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
