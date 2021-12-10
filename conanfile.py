@@ -7,7 +7,7 @@ from conan.tools.layout import cmake_layout
 
 def get_version():
     try:
-        content = load("modules/common/CMakeLists.txt")
+        content = load("modules/common/commonVersionString.cmake")
         version = re.search("set\(COMMON_VERSION (\d+\.\d+\.\d+)\)", content).group(1)
         return version.strip()
     except Exception as e:
@@ -21,7 +21,7 @@ class CommonConan(ConanFile):
     license = "GNU AFFERO GENERAL PUBLIC LICENSE Version 3"
     author = "Tim Zoet"
     url = "https://github.com/TimZoet/common"
-    description = "C++ utilities"
+    description = "C++ utilities."
 
     # Binary configuration
     settings = "os", "compiler", "build_type", "arch"
