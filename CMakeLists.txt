@@ -14,19 +14,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # CMake modules.
 ################################################################################
 
-set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_BINARY_DIR};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(InstallTarget)
 include(ISA)
 include(MakeTarget)
-
-################################################################################
-# Conan.
-################################################################################
-
-option(USE_CONAN "If you are using the Conan package manager, enable this option.")
-if(USE_CONAN)
-    include(ConanPkgUtils)
-    conan_pkg_utils(PROFILE gcc10.1 PACKAGES nlohmann_json/3.9.1)
-endif()
 
 ################################################################################
 # Add subdirectories.
