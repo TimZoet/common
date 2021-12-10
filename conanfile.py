@@ -18,11 +18,10 @@ class CommonConan(ConanFile):
     version = get_version()
 
     # Optional metadata
-    license = "<Put the package license here>"
+    license = "GNU AFFERO GENERAL PUBLIC LICENSE Version 3"
     author = "Tim Zoet"
-    url = "<Package recipe repository url here, for issues about the package>"
-    description = "<Description of Hello here>"
-    topics = ("<Put some tag here>", "<here>", "<and here>")
+    url = "https://github.com/TimZoet/common"
+    description = "C++ utilities"
 
     # Binary configuration
     settings = "os", "compiler", "build_type", "arch"
