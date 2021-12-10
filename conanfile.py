@@ -1,10 +1,21 @@
+import re
+
 from conans import ConanFile
+from conans.tools import load
 from conan.tools.cmake import CMakeToolchain, CMake
 from conan.tools.layout import cmake_layout
 
+def get_version():
+    try:
+        content = load("modules/common/CMakeLists.txt")
+        version = re.search("set\(COMMON_VERSION (\d+\.\d+\.\d+)\)", content).group(1)
+        return version.strip()
+    except Exception as e:
+        return None
+
 class CommonConan(ConanFile):
     name = "common"
-    version = "0.1.0"
+    version = get_version()
 
     # Optional metadata
     license = "<Put the package license here>"
