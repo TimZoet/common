@@ -26,8 +26,9 @@ include(MakeTarget)
 ################################################################################
 
 add_subdirectory(modules)
-add_subdirectory(external)
-add_subdirectory(tests)
+if (BUILD_TESTS)
+    add_subdirectory(tests)
+endif()
 
 ################################################################################
 # Set startup project.

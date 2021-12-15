@@ -1,3 +1,5 @@
+find_package(bettertest REQUIRED)
+
 set(NAME common_test)
 set(TYPE test)
 set(INCLUDE_DIR "include/common_test")
@@ -13,8 +15,8 @@ set(SOURCES
 )
 
 set(DEPS_PRIVATE
-	bettertest
-	common
+	bettertest::bettertest
+	common::common
 )
 
 make_target(TYPE ${TYPE} NAME ${NAME} OUTDIR "tests" STARTUP HEADERS "${HEADERS}" SOURCES "${SOURCES}" DEPS_PRIVATE "${DEPS_PRIVATE}")

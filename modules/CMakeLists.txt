@@ -1,10 +1,1 @@
 add_subdirectory(common)
-
-if(BUILD_TESTS)
-    add_subdirectory(bettertest)
-    add_subdirectory(math)
-    add_subdirectory(parsertongue)
-    add_subdirectory(svch)
-    add_subdirectory(svg)
-    add_subdirectory(svgen)
-endif()
