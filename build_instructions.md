@@ -44,7 +44,7 @@ With that done, install the required packages to your build folder and generate 
 ```cmd
 mkdir build && cd build
 conan install -s build_type=Release -o build_tests=True --build=missing ..\source
-cmake -G "Visual Studio 16 2019" -A x64 ..\source
+cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_TOOLCHAIN_FILE="conan_toolchain.cmake" ..\source
 ```
 
 Then build and run the tests.
