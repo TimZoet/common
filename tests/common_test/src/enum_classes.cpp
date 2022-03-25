@@ -77,6 +77,18 @@ namespace test
         compareEQ(abcd & cd, cd);
     }
 
+    void EnumClassNot::operator()()
+    {
+        const auto a = Enum::A;
+        const auto b = Enum::B;
+        const auto c = Enum::C;
+        const auto d = Enum::D;
+
+        compareEQ(~a, static_cast<Enum>(~static_cast<uint32_t>(1)));
+        compareEQ(~b, static_cast<Enum>(~static_cast<uint32_t>(2)));
+        compareEQ(~(a | b), static_cast<Enum>(~static_cast<uint32_t>(3)));
+    }
+
     void EnumClassToIntegral::operator()()
     {
         const auto a16 = EnumInt16::A;

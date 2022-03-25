@@ -22,6 +22,12 @@ namespace test
         void operator()() override;
     };
 
+    class EnumClassNot : public bt::UnitTest<EnumClassNot, bt::CompareMixin>
+    {
+    public:
+        void operator()() override;
+    };
+
     class EnumClassToIntegral : public bt::UnitTest<EnumClassToIntegral, bt::CompareMixin>
     {
     public:
