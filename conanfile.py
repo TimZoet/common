@@ -26,7 +26,7 @@ class CommonConan(ConanFile):
     
     def set_version(self):
         base = self.python_requires["pyreq"].module.BaseConan
-        base.set_version(self, "modules/common/commonVersionString.cmake", "COMMON_VERSION")
+        base.set_version(self, "commonVersionString.cmake", "COMMON_VERSION")
     
     def init(self):
         base = self.python_requires["pyreq"].module.BaseConan
