@@ -1,5 +1,3 @@
-include(commonVersionString)
-
 set(NAME common)
 set(TYPE module)
 set(INCLUDE_DIR "include/common")
