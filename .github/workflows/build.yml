@@ -11,8 +11,12 @@ jobs:
         uses: turtlebrowser/get-conan@main
       - name: Conan version
         run: echo "${{ steps.conan.outputs.version }}"
+      - name: Conan config install
+        run: conan config install --type git git@github.com:TimZoet/conan-config.git
       - name: Checkout TimZoet/common
         uses: actions/checkout@v3
+        with:
+          path: packages/common
       - name: Checkout TimZoet/pyreq
         uses: actions/checkout@v3
         with:
@@ -27,3 +31,7 @@ jobs:
         run: conan export --user timzoet --channel stable packages/pyreq
       - name: Export TimZoet/cmake-modules
         run: conan export --user timzoet --channel stable packages/cmake-modules
+      - name: Conan install
+        run: |
+          mkdir build_release && cd build_release
+          conan install -pr:h=gcc12_1-release -pr:b=gcc12_1-release -s build_type=Release --build=all ../packages/common
