@@ -39,7 +39,7 @@ jobs:
         run: |
           pwd
           ls -R
-        working-directory: ./packages
+        working-directory: packages
       - name: Export TimZoet/pyreq
         run: conan export --user timzoet --channel stable packages/pyreq
       - name: Export TimZoet/cmake-modules
