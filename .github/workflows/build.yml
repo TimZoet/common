@@ -13,6 +13,7 @@ jobs:
         run: echo "${{ steps.conan.outputs.version }}"
   checkout:
     runs-on: ubuntu-latest
+    needs: [setup]
     name: Checkout repositories
     steps:
       - name: Checkout TimZoet/common
@@ -29,6 +30,7 @@ jobs:
           path: packages/cmake-modules
   export:
     runs-on: ubuntu-latest
+    needs: [checkout]
     name: Export local Conan packages
     steps:
       - name: Add Conan to path
