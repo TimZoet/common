@@ -31,6 +31,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Export local Conan packages
     steps:
+      - name: Add Conan to path
+        run: echo "/home/runner/.local/bin" >> $GITHUB_PATH
       - name: Export TimZoet/pyreq
         run: conan export packages/pyreq timzoet/stable
       - name: Export TimZoet/cmake-modules
