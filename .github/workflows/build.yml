@@ -2,11 +2,36 @@ name: build
 run-name: Build
 on: [push]
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
+    name: Setup tools
     steps:
       - name: Install latest Conan
         id: conan
         uses: turtlebrowser/get-conan@main
       - name: Conan version
         run: echo "${{ steps.conan.outputs.version }}"
+  checkout:
+    runs-on: ubuntu-latest
+    name: Checkout repositories
+    steps:
+      - name: Checkout TimZoet/common
+        uses: actions/checkout@v3
+      - name: Checkout TimZoet/pyreq
+        uses: actions/checkout@v3
+        with:
+          repository: TimZoet/pyreq
+          path: packages/pyreq
+      - name: Checkout TimZoet/cmake-modules
+        uses: actions/checkout@v3
+        with:
+          repository: TimZoet/cmake-modules
+          path: packages/cmake-modules
+  export:
+    runs-on: ubuntu-latest
+    name: Export local Conan packages
+    steps:
+      - name: Export TimZoet/pyreq
+        run: conan export packages/pyreq timzoet/stable
+      - name: Export TimZoet/cmake-modules
+        run: conan export packages/cmake-modules timzoet/stable
