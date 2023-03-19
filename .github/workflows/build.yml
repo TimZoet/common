@@ -36,6 +36,7 @@ jobs:
       - name: Add Conan to path
         uses: turtlebrowser/get-conan@main
       - name: List
+        shell: bash
         run: |
           ls
           ls -R
