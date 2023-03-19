@@ -12,7 +12,7 @@ jobs:
       - name: Conan version
         run: echo "${{ steps.conan.outputs.version }}"
       - name: Conan config install
-        run: conan config install --type git git@github.com:TimZoet/conan-config.git
+        run: conan config install --type git https://github.com/TimZoet/conan-config.git
       - name: Checkout TimZoet/common
         uses: actions/checkout@v3
         with:
