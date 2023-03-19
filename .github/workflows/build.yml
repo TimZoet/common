@@ -35,7 +35,9 @@ jobs:
     steps:
       - name: Add Conan to path
         uses: turtlebrowser/get-conan@main
+      - name: List
+        run: ls -R .
       - name: Export TimZoet/pyreq
-        run: ls -R && conan export --user timzoet --channel stable packages/pyreq
+        run: conan export --user timzoet --channel stable packages/pyreq
       - name: Export TimZoet/cmake-modules
         run: conan export --user timzoet --channel stable packages/cmake-modules
