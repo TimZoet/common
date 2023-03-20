@@ -50,9 +50,9 @@ jobs:
       - name: Export TimZoet/common
         run: conan export --user timzoet --channel stable source
       - name: Export TimZoet/parsertongue
-        run: conan export --user timzoet --channel stable package/parsertongue
+        run: conan export --user timzoet --channel stable packages/parsertongue
       - name: Export TimZoet/bettertest
-        run: conan export --user timzoet --channel stable package/bettertest
+        run: conan export --user timzoet --channel stable packages/bettertest
 
       - name: Fix package name
         run: cd source && python rename.py
