@@ -16,16 +16,26 @@ jobs:
       - name: Checkout TimZoet/common
         uses: actions/checkout@v3
         with:
-          path: packages/common
+          path: source
+      - name: Fix package name
+        run: cd source && python rename.py
       - name: Checkout TimZoet/pyreq
         uses: actions/checkout@v3
         with:
           repository: TimZoet/pyreq
+          ref: github_actions
           path: packages/pyreq
       - name: Checkout TimZoet/cmake-modules
         uses: actions/checkout@v3
         with:
           repository: TimZoet/cmake-modules
+          ref: github_actions
+          path: packages/cmake-modules
+      - name: Checkout TimZoet/parsertongue
+        uses: actions/checkout@v3
+        with:
+          repository: TimZoet/cmake-modules
+          ref: github_actions
           path: packages/cmake-modules
       - name: Export TimZoet/pyreq
         run: conan export --user timzoet --channel stable packages/pyreq
@@ -33,5 +43,17 @@ jobs:
         run: conan export --user timzoet --channel stable packages/cmake-modules
       - name: Conan install
         run: |
-          mkdir build_release && cd build_release
-          conan install -pr:h=gcc12_1-release -pr:b=gcc12_1-release -s build_type=Release --build=all ../packages/common
+          mkdir build && cd build
+          conan install -pr:h=gcc12_1-release -pr:b=gcc12_1-release -s build_type=Release -o build_tests=True --build=all -of=. ../source
+          cmake -S ../source -B . -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
+          cmake --build . --config Release
+          .build\bin\tests\common_test -u=*
+      - name: CMake build
+        working-directory: ./build
+        run: |
+          cmake -S ../source -B . -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
+          cmake --build . --config Release
+      - name: Run tests
+        working-directory: ./build/bin/tests
+        run: |
+          .\common_test -u=*
