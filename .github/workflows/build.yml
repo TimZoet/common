@@ -33,9 +33,9 @@ jobs:
       - name: Checkout TimZoet/parsertongue
         uses: actions/checkout@v3
         with:
-          repository: TimZoet/cmake-modules
+          repository: TimZoet/parsertongue
           ref: github_actions
-          path: packages/cmake-modules
+          path: packages/parsertongue
       - name: Checkout TimZoet/bettertest
         uses: actions/checkout@v3
         with:
