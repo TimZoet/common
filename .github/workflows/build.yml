@@ -13,6 +13,7 @@ jobs:
         run: echo "${{ steps.conan.outputs.version }}"
       - name: Conan config install
         run: conan config install --type git https://github.com/TimZoet/conan-config.git
+      
       - name: Checkout TimZoet/common
         uses: actions/checkout@v3
         with:
@@ -35,14 +36,26 @@ jobs:
           repository: TimZoet/cmake-modules
           ref: github_actions
           path: packages/cmake-modules
-      - name: Export TimZoet/common
-        run: conan export --user timzoet --channel stable source
-      - name: Fix package name
-        run: cd source && python rename.py
+      - name: Checkout TimZoet/bettertest
+        uses: actions/checkout@v3
+        with:
+          repository: TimZoet/bettertest
+          ref: github_actions
+          path: packages/bettertest
+      
       - name: Export TimZoet/pyreq
         run: conan export --user timzoet --channel stable packages/pyreq
       - name: Export TimZoet/cmake-modules
         run: conan export --user timzoet --channel stable packages/cmake-modules
+      - name: Export TimZoet/common
+        run: conan export --user timzoet --channel stable source
+      - name: Export TimZoet/parsertongue
+        run: conan export --user timzoet --channel stable package/parsertongue
+      - name: Export TimZoet/bettertest
+        run: conan export --user timzoet --channel stable package/bettertest
+
+      - name: Fix package name
+        run: cd source && python rename.py
       - name: Conan install
         run: |
           mkdir build && cd build
