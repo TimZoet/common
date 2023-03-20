@@ -59,7 +59,7 @@ jobs:
       - name: Conan install
         run: |
           mkdir build && cd build
-          conan install -pr:h=gcc12_1-release -pr:b=gcc12_1-release -s build_type=Release -o build_tests=True --build=all -of=. ../source
+          conan install -pr:h=gcc12_1-release -pr:b=gcc12_1-release -s build_type=Release -o build_tests=True --build=missing -of=. ../source
           cmake -S ../source -B . -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
           cmake --build . --config Release
           .build\bin\tests\common_test -u=*
