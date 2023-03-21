@@ -59,7 +59,7 @@ jobs:
       - name: Conan install
         run: |
           mkdir build && cd build
-          conan install -pr:h=vs2022-release -pr:b=vs2022-release -s build_type=Release -o build_tests=True -o bettertest:build_xml=False --build=missing -of=. ../source
+          conan install -pr:h=vs2022-release -pr:b=vs2022-release -s build_type=Release -o build_tests=True -o bettertest/*:build_xml=False --build=missing -of=. ../source
       - name: CMake build
         working-directory: ./build
         run: |
