@@ -9,7 +9,7 @@ jobs:
       - name: Create venv
         run: |
           python -m venv pyenv
-          .\pyenv\Scripts\activate.bat
+          .\\pyenv\\Scripts\\activate.bat
       - name: Install latest Conan
         id: conan
         uses: turtlebrowser/get-conan@main
