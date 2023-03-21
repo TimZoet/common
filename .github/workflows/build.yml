@@ -6,6 +6,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Build MSVC
     steps:
+      - name: Create venv
+        run: |
+          python -m venv pyenv
+          .\pyenv\Scripts\activate.bat
       - name: Install latest Conan
         id: conan
         uses: turtlebrowser/get-conan@main
@@ -57,10 +61,9 @@ jobs:
       - name: Fix package name
         run: cd source && python rename.py
       - name: Conan install
-        shell: cmd
         run: |
           mkdir build && cd build
-          conan install -pr:h=vs2022-release -pr:b=vs2022-release -s build_type=Release -o build_tests=True -o bettertest/*:build_xml=False --build=missing -of=. ../source
+          conan install -pr:h=vs2022-release -pr:b=vs2022-release -s build_type=Release -o build_tests=True --build=missing -of=. ../source
       - name: CMake build
         working-directory: ./build
         run: |
