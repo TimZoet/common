@@ -51,7 +51,7 @@ jobs:
       - name: Export TimZoet/common
         run: conan export --user timzoet --channel stable source
       - name: Create
-        run: conan create -pr:h=vs2022-release -pr:b=vs2022-release -s build_type=Release source
+        run: conan create -pr:h=vs2022-release -pr:b=vs2022-release -s build_type=Release --build=missing source
       - name: Export TimZoet/parsertongue
         run: conan export --user timzoet --channel stable packages/parsertongue
       - name: Export TimZoet/bettertest
