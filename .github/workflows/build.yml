@@ -13,7 +13,6 @@ jobs:
         run: echo "${{ steps.conan.outputs.version }}"
       - name: Conan config install
         run: |
-          set CONAN_HOME="$env:GITHUB_WORKSPACE/conan"
           conan config install --type git https://github.com/TimZoet/conan-config.git
       
       - name: Checkout TimZoet/common
