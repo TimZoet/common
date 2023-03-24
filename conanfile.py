@@ -78,7 +78,7 @@ class CommonConan(ConanFile):
 
     def build(self):
         cmake = self.configure_cmake()
-        cmake.configure()
+        cmake.configure(cli_args=["--trace-expand --log-level=TRACE --debug-output"])
         cmake.build()
 
     def package(self):
