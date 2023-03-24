@@ -67,7 +67,7 @@ jobs:
       - name: CMake build
         run: |
           cd build
-          cmake -S ../source -B . -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=./conan_toolchain.cmake
+          cmake -S ../source -B . -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=.\conan_toolchain.cmake
           cmake --build . --config Release
       - name: Run tests
         run: |
