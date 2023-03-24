@@ -37,7 +37,7 @@ jobs:
           repository: TimZoet/parsertongue
           ref: github_actions
           path: packages/parsertongue
-      - name: Checkout TimZoet/bettertest
+      - name: Checkout TimZoet/bettertest --recurse-submodules
         uses: actions/checkout@v3
         with:
           repository: TimZoet/bettertest
