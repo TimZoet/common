@@ -37,12 +37,13 @@ jobs:
           repository: TimZoet/parsertongue
           ref: github_actions
           path: packages/parsertongue
-      - name: Checkout TimZoet/bettertest --recurse-submodules
+      - name: Checkout TimZoet/bettertest
         uses: actions/checkout@v3
         with:
           repository: TimZoet/bettertest
           ref: github_actions
           path: packages/bettertest
+          submodules: true
       
       - name: Export TimZoet/pyreq
         run: conan export --user timzoet --channel stable packages/pyreq
