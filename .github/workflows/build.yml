@@ -65,14 +65,14 @@ jobs:
           mkdir build
           conan install -pr:h=vs2022-release -pr:b=vs2022-release -s build_type=Release -o build_tests=True --build=missing -of=build source
       - name: CMake build
-        working-directory: ./build
         run: |
+          cd build
           cmake -S ../source -B . -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
           cmake --build . --config Release
       - name: Run tests
-        working-directory: ./build/bin/tests
         run: |
-          .\common_test -u=*
+          cd ./build/bin/tests
+          .\common_test
   
   build-gcc:
     runs-on: ubuntu-latest
