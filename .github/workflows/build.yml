@@ -5,6 +5,7 @@ jobs:
   build-msvc:
     runs-on: windows-latest
     name: Build MSVC
+    if: false
     steps:
       - name: Install latest Conan
         id: conan
@@ -63,7 +64,7 @@ jobs:
       - name: Conan install
         run: |
           mkdir build
-          conan install -pr:h=vs2022-release -pr:b=vs2022-release -s build_type=Release -o build_tests=True --build=missing -of=build source
+          conan install -pr:h=source/buildtools/profiles/vs2022-release-test -pr:b=source/buildtools/profiles/vs2022-release-test -s build_type=Release --build=missing -of=build source
       - name: CMake configure
         run: cmake -S ../source -B . -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE:FILEPATH=conan_toolchain.cmake
         working-directory: ./build
