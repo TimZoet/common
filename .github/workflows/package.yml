@@ -47,5 +47,5 @@ jobs:
         run: cmake --build ${{ github.workspace }}/build --target INSTALL --config Release
       - uses: actions/upload-artifact@v3
         with:
-          name: timzoet/${{ github.ref_name }}
+          name: timzoet-${{ github.ref_name }}
           path: ${{ github.workspace }}/install
