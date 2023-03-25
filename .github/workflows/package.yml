@@ -42,7 +42,7 @@ jobs:
           mkdir build
           conan install -pr:h=source/buildtools/profiles/common-package-vs2022-release -pr:b=source/buildtools/profiles/common-package-vs2022-release --build=missing -of=build source
       - name: CMake configure
-        run: cmake -S ${{ github.workspace }}/source -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
+        run: cmake -S ${{ github.workspace }}/source -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install -DCMAKE_TOOLCHAIN_FILE:FILEPATH=conan_toolchain.cmake
       - name: CMake install
         run: cmake --build ${{ github.workspace }}/build --target INSTALL --config Release
       - uses: actions/upload-artifact@v3
