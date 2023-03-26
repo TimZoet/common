@@ -5,141 +5,34 @@ jobs:
   build-msvc:
     runs-on: windows-latest
     name: Build MSVC
-    if: false
+    if: true
     steps:
-      - name: Install latest Conan
-        id: conan
-        uses: turtlebrowser/get-conan@main
-      - name: Conan version
-        run: echo "${{ steps.conan.outputs.version }}"
-      - name: Conan config install
-        run: |
-          conan config install --type git https://github.com/TimZoet/conan-config.git
+      - name: Setup Conan
+        uses: TimZoet/action-setup-conan
       
-      - name: Checkout TimZoet/common
-        uses: actions/checkout@v3
-        with:
-          path: source
-      - name: Checkout TimZoet/pyreq
-        uses: actions/checkout@v3
-        with:
-          repository: TimZoet/pyreq
-          ref: github_actions
-          path: packages/pyreq
-      - name: Checkout TimZoet/cmake-modules
-        uses: actions/checkout@v3
-        with:
-          repository: TimZoet/cmake-modules
-          ref: github_actions
-          path: packages/cmake-modules
-      - name: Checkout TimZoet/parsertongue
-        uses: actions/checkout@v3
-        with:
-          repository: TimZoet/parsertongue
-          ref: github_actions
-          path: packages/parsertongue
-      - name: Checkout TimZoet/bettertest
-        uses: actions/checkout@v3
-        with:
-          repository: TimZoet/bettertest
-          ref: github_actions
-          path: packages/bettertest
-          submodules: true
-      
-      - name: Export TimZoet/pyreq
-        run: conan export --user timzoet --channel stable packages/pyreq
-      - name: Export TimZoet/cmake-modules
-        run: conan export --user timzoet --channel stable packages/cmake-modules
-      - name: Export TimZoet/common
-        run: conan export --user timzoet --channel stable source
-      - name: Export TimZoet/parsertongue
-        run: conan export --user timzoet --channel stable packages/parsertongue
-      - name: Export TimZoet/bettertest
-        run: conan export --user timzoet --channel stable packages/bettertest
-
+      - name: Setup current repository
+        uses: TimZoet/action-checkout-current
       - name: Fix package name
         run: |
           cd source
           python rename.py
+      
+      - name: Retrieve dependencies
+        uses: TimZoet/action-retrieve-dependencies
+        with:
+          conanfile: ${{ github.workspace }}/source/conanfile.py
+          profile: ${{ github.workspace }}/source/buildtools/profiles/common-test-vs2022-release
+          directory: ${{ github.workspace }}/packages
+
       - name: Conan install
         run: |
           mkdir build
-          conan install -pr:h=source/buildtools/profiles/vs2022-release-test -pr:b=source/buildtools/profiles/vs2022-release-test -s build_type=Release --build=missing -of=build source
+          conan install -pr:h=${{ github.workspace }}/source/buildtools/profiles/common-test-vs2022-release -pr:b=${{ github.workspace }}/source/buildtools/profiles/common-test-vs2022-release -s build_type=Release --build=missing -of=${{ github.workspace }}/build ${{ github.workspace }}/source
       - name: CMake configure
-        run: cmake -S ../source -B . -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE:FILEPATH=conan_toolchain.cmake
-        working-directory: ./build
+        run: cmake -S ${{ github.workspace }}/source -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE:FILEPATH=conan_toolchain.cmake
       - name: CMake build
         run: cmake --build . --config Release
         working-directory: ./build
       - name: Run tests
         run: .\common_test
         working-directory: ./build/bin/tests
-  
-  build-gcc:
-    runs-on: ubuntu-latest
-    name: Build GCC
-    if: false
-    steps:
-      - name: Install latest Conan
-        id: conan
-        uses: turtlebrowser/get-conan@main
-      - name: Conan version
-        run: echo "${{ steps.conan.outputs.version }}"
-      - name: Conan config install
-        run: conan config install --type git https://github.com/TimZoet/conan-config.git
-      
-      - name: Checkout TimZoet/common
-        uses: actions/checkout@v3
-        with:
-          path: source
-      - name: Checkout TimZoet/pyreq
-        uses: actions/checkout@v3
-        with:
-          repository: TimZoet/pyreq
-          ref: github_actions
-          path: packages/pyreq
-      - name: Checkout TimZoet/cmake-modules
-        uses: actions/checkout@v3
-        with:
-          repository: TimZoet/cmake-modules
-          ref: github_actions
-          path: packages/cmake-modules
-      - name: Checkout TimZoet/parsertongue
-        uses: actions/checkout@v3
-        with:
-          repository: TimZoet/parsertongue
-          ref: github_actions
-          path: packages/parsertongue
-      - name: Checkout TimZoet/bettertest
-        uses: actions/checkout@v3
-        with:
-          repository: TimZoet/bettertest
-          ref: github_actions
-          path: packages/bettertest
-      
-      - name: Export TimZoet/pyreq
-        run: conan export --user timzoet --channel stable packages/pyreq
-      - name: Export TimZoet/cmake-modules
-        run: conan export --user timzoet --channel stable packages/cmake-modules
-      - name: Export TimZoet/common
-        run: conan export --user timzoet --channel stable source
-      - name: Export TimZoet/parsertongue
-        run: conan export --user timzoet --channel stable packages/parsertongue
-      - name: Export TimZoet/bettertest
-        run: conan export --user timzoet --channel stable packages/bettertest
-
-      - name: Fix package name
-        run: cd source && python rename.py
-      - name: Conan install
-        run: |
-          mkdir build && cd build
-          conan install -pr:h=gcc12_1-release -pr:b=gcc12_1-release -s build_type=Release -o build_tests=True --build=missing -of=. ../source
-      - name: CMake build
-        working-directory: ./build
-        run: |
-          cmake -S ../source -B . -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
-          cmake --build . --config Release
-      - name: Run tests
-        working-directory: ./build/bin/tests
-        run: |
-          .\common_test -u=*
