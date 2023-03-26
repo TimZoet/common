@@ -8,17 +8,17 @@ jobs:
     if: true
     steps:
       - name: Setup Conan
-        uses: TimZoet/action-setup-conan
+        uses: TimZoet/action-setup-conan@trunk
       
       - name: Setup current repository
-        uses: TimZoet/action-checkout-current
+        uses: TimZoet/action-checkout-current@trunk
       - name: Fix package name
         run: |
           cd source
           python rename.py
       
       - name: Retrieve dependencies
-        uses: TimZoet/action-retrieve-dependencies
+        uses: TimZoet/action-retrieve-dependencies@trunk
         with:
           conanfile: ${{ github.workspace }}/source/conanfile.py
           profile: ${{ github.workspace }}/source/buildtools/profiles/common-test-vs2022-release
