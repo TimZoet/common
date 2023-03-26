@@ -17,6 +17,15 @@ jobs:
           cd source
           python rename.py
       
+      - name: Retrieve pyreq
+        uses: actions/checkout@v3
+        with:
+          repository: TimZoet/pyreq
+          ref: github_actions
+          path: pyreq
+      - name: Export pyreq
+        run: conan export --user timzoet --channel github_actions ${{ github.workspace }}/pyreq
+
       - name: Retrieve dependencies
         uses: TimZoet/action-retrieve-dependencies@trunk
         with:
