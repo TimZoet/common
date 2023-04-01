@@ -16,7 +16,7 @@ class CommonConan(ConanFile):
     ## Settings.                                                              ##
     ############################################################################
 
-    python_requires = "pyreq/1.0.0@timzoet/github_actions"
+    python_requires = "pyreq/1.0.0@timzoet/v1.0.0"
     
     python_requires_extend = "pyreq.BaseConan"
     
@@ -57,8 +57,8 @@ class CommonConan(ConanFile):
         base.requirements(self)
         
         if self.options.build_tests:
-            self.requires("common/{}@timzoet/github_actions".format(self.version))
-            self.requires("bettertest/1.0.0@timzoet/github_actions")
+            self.requires(f"common/{self.version}@timzoet/v{self.version}")
+            self.requires("bettertest/1.0.0@timzoet/v1.0.0")
 
     def package_info(self):
         self.cpp_info.libs = ["common"]
