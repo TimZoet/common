@@ -1,0 +1,51 @@
+name: package
+run-name: Package
+on: [push]
+jobs:
+  build-msvc:
+    runs-on: windows-latest
+    name: Package MSVC
+    steps:
+      - name: Install latest Conan
+        id: conan
+        uses: turtlebrowser/get-conan@main
+      - name: Conan version
+        run: echo "${{ steps.conan.outputs.version }}"
+      - name: Conan config install
+        run: |
+          conan config install --type git https://github.com/TimZoet/conan-config.git
+      
+      - name: Checkout TimZoet/common
+        uses: actions/checkout@v3
+        with:
+          path: source
+      - name: Checkout TimZoet/pyreq
+        uses: actions/checkout@v3
+        with:
+          repository: TimZoet/pyreq
+          ref: github_actions
+          path: packages/pyreq
+      - name: Checkout TimZoet/cmake-modules
+        uses: actions/checkout@v3
+        with:
+          repository: TimZoet/cmake-modules
+          ref: github_actions
+          path: packages/cmake-modules
+      
+      - name: Export TimZoet/pyreq
+        run: conan export --user timzoet --channel stable packages/pyreq
+      - name: Export TimZoet/cmake-modules
+        run: conan export --user timzoet --channel stable packages/cmake-modules
+
+      - name: Conan install
+        run: |
+          mkdir build
+          conan install -pr:h=source/buildtools/profiles/common-package-vs2022-release -pr:b=source/buildtools/profiles/common-package-vs2022-release --build=missing -of=build source
+      - name: CMake configure
+        run: cmake -S ${{ github.workspace }}/source -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install -DCMAKE_TOOLCHAIN_FILE:FILEPATH=conan_toolchain.cmake
+      - name: CMake install
+        run: cmake --build ${{ github.workspace }}/build --target INSTALL --config Release
+      - uses: actions/upload-artifact@v3
+        with:
+          name: timzoet-${{ github.ref_name }}
+          path: ${{ github.workspace }}/install

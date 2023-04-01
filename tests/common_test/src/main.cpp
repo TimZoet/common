@@ -19,10 +19,9 @@ int main(int argc, char** argv)
         std::filesystem::current_path(p);
     }
 #endif
-    bt::run<test::EnumClassOr,
-            test::EnumClassAnd,
-            test::EnumClassNot,
-            test::EnumClassToIntegral,
-            test::EnumClassReduction>(argc, argv, "common");
-    return 0;
+    return bt::run<test::EnumClassOr,
+                   test::EnumClassAnd,
+                   test::EnumClassNot,
+                   test::EnumClassToIntegral,
+                   test::EnumClassReduction>(argc, argv, "common");
 }

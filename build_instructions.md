@@ -1,17 +1,11 @@
 # Build Instructions
 
-## Dependencies
+## Getting the Code
 
-When using Conan, you will need to have the [pyreq](https://github.com/TimZoet/pyreq) package installed.
-
-When building tests, the [BetterTest](https://github.com/TimZoet/BetterTest) package is needed.
-
-## Cloning
-
-This project uses git submodules. Cloning therefore requires an additional flag:
+To retrieve the code from GitHub:
 
 ```cmd
-git clone git@github.com:TimZoet/common.git source --recurse-submodules
+git clone https://github.com/TimZoet/common.git source
 ```
 
 ## Exporting to Conan
@@ -19,32 +13,49 @@ git clone git@github.com:TimZoet/common.git source --recurse-submodules
 To export the `common` package to your local Conan cache:
 
 ```cmd
-cd source
-conan export . user/channel
+conan export --user timzoet --channel v1.0.0 source
 ```
 
-## Building and Installing Locally
+Make sure to update the channel when the version is different.
 
-Generating project files can be done using e.g.:
+## Including the Package
 
-```cmd
-mkdir build && cd build
-cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_INSTALL_PREFIX=..\install ..\source
+To include the package from your `conanfile.py`:
+
+```py
+def requirements(self):
+    self.requires("common/1.0.0@timzoet/v1.0.0")
 ```
 
-Then build and install using your preferred method.
+To find the package and link it in one of your `CMakeLists.txt`:
+
+```cmake
+find_package(common REQUIRED)
+target_link_libraries(<target> common::common)
+```
 
 ## Building Tests
 
 Before building tests, you must first modify the `conanfile.py`. Change the name of the package to something other than
-`common`, e.g. `common_test`. This is needed because the `BetterTest` package relies on the `common` package, causing a cyclic dependency.
+`common`, e.g. `common_test`. This is needed because the `bettertest` package relies on the `common` package, causing a
+cyclic dependency.
 
-With that done, install the required packages to your build folder and generate the project files:
+After fixing the name, invoke `conan install`:
 
 ```cmd
-mkdir build && cd build
-conan install -s build_type=Release -o build_tests=True --build=missing ..\source
-cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_TOOLCHAIN_FILE="conan_toolchain.cmake" ..\source
+conan install -pr:h=source/buildtools/profiles/common-test-vs2022-release -pr:b=source/buildtools/profiles/common-test-vs2022-release -s build_type=Release --build=missing -of=build source
 ```
 
-Then build and run the tests.
+Then generate and build with CMake:
+
+```cmd
+cmake -S source -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE:FILEPATH=conan_toolchain.cmake
+cmake --build build --config Release
+```
+
+Finally, run the test application:
+
+```cmd
+cd build/bin/tests
+.\common_test
+```

@@ -16,7 +16,7 @@ class CommonConan(ConanFile):
     ## Settings.                                                              ##
     ############################################################################
 
-    python_requires = "pyreq/1.0.0@timzoet/stable"
+    python_requires = "pyreq/1.0.0@timzoet/v1.0.0"
     
     python_requires_extend = "pyreq.BaseConan"
     
@@ -30,10 +30,8 @@ class CommonConan(ConanFile):
     
     def init(self):
         base = self.python_requires["pyreq"].module.BaseConan
-        self.generators = base.generators + self.generators
-        self.settings = base.settings + self.settings
-        self.options = {**base.options, **self.options}
-        self.default_options = {**base.default_options, **self.default_options}
+        self.settings = base.settings
+        self.options.update(base.options, base.default_options)
     
     ############################################################################
     ## Building.                                                              ##
@@ -44,21 +42,24 @@ class CommonConan(ConanFile):
         copy(self, "commonVersionString.cmake", self.recipe_folder, self.export_sources_folder)
         copy(self, "license", self.recipe_folder, self.export_sources_folder)
         copy(self, "readme.md", self.recipe_folder, self.export_sources_folder)
+        copy(self, "buildtools/*", self.recipe_folder, self.export_sources_folder)
         copy(self, "modules/*", self.recipe_folder, self.export_sources_folder)
     
     def config_options(self):
-        base = self.python_requires["pyreq"].module.BaseConan
         if self.settings.os == "Windows":
             del self.options.fPIC
+    
+    def configure(self):
+        pass
     
     def requirements(self):
         base = self.python_requires["pyreq"].module.BaseConan
         base.requirements(self)
         
         if self.options.build_tests:
-            self.requires("common/{}@timzoet/stable".format(self.version))
-            self.requires("bettertest/1.0.0@timzoet/stable")
-    
+            self.requires(f"common/{self.version}@timzoet/v{self.version}")
+            self.requires("bettertest/1.0.0@timzoet/v1.0.0")
+
     def package_info(self):
         self.cpp_info.libs = ["common"]
     
@@ -77,12 +78,10 @@ class CommonConan(ConanFile):
         return cmake
 
     def build(self):
-        base = self.python_requires["pyreq"].module.BaseConan
-        cmake = base.configure_cmake(self)
+        cmake = self.configure_cmake()
         cmake.configure()
         cmake.build()
 
     def package(self):
-        base = self.python_requires["pyreq"].module.BaseConan
-        cmake = base.configure_cmake(self)
+        cmake = self.configure_cmake()
         cmake.install()
