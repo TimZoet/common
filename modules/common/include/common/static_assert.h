@@ -4,8 +4,8 @@
 // Standard includes.
 ////////////////////////////////////////////////////////////////
 
-template<bool flag = false>
-void constexpr_static_assert()
+template<bool flag>
+constexpr void constexpr_static_assert()
 {
     static_assert(flag, "No match");
 }
