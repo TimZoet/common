@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////
 
 template<bool flag = false>
-void constexpr_static_assert()
+constexpr void constexpr_static_assert()
 {
     static_assert(flag, "No match");
 }
