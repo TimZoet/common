@@ -12,11 +12,27 @@ class CommonConan(ConanFile):
     
     url = "https://github.com/TimZoet/common"
 
+    @property
+    def user(self):
+        return getattr(self, "_user", "timzoet")
+    
+    @user.setter
+    def user(self, value):
+        self._user = value
+    
+    @property
+    def channel(self):
+        return getattr(self, "_channel", f"v{self.version}")
+    
+    @channel.setter
+    def channel(self, value):
+        self._channel = value
+
     ############################################################################
     ## Settings.                                                              ##
     ############################################################################
 
-    python_requires = "pyreq/1.0.0@timzoet/v1.0.0"
+    python_requires = "pyreq/1.0.1@timzoet/v1.0.1"
     
     python_requires_extend = "pyreq.BaseConan"
     
@@ -58,7 +74,7 @@ class CommonConan(ConanFile):
         
         if self.options.build_tests:
             self.requires(f"common/{self.version}@timzoet/v{self.version}")
-            self.requires("bettertest/1.0.0@timzoet/v1.0.0")
+            self.requires("bettertest/1.0.1@timzoet/v1.0.1")
 
     def package_info(self):
         self.cpp_info.libs = ["common"]
