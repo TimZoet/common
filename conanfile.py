@@ -32,7 +32,7 @@ class CommonConan(ConanFile):
     ## Settings.                                                              ##
     ############################################################################
 
-    python_requires = "pyreq/1.0.1@timzoet/v1.0.1"
+    python_requires = "pyreq/1.1.0@timzoet/v1.1.0"
     
     python_requires_extend = "pyreq.BaseConan"
     

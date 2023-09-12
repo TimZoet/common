@@ -21,10 +21,10 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: TimZoet/pyreq
-          ref: v1.0.0
+          ref: v1.1.0
           path: pyreq
       - name: Export pyreq
-        run: conan export --user timzoet --channel v1.0.0 ${{ github.workspace }}/pyreq
+        run: conan export --user timzoet --channel v1.1.0 ${{ github.workspace }}/pyreq
 
       - name: Retrieve dependencies
         uses: TimZoet/action-retrieve-dependencies@trunk
