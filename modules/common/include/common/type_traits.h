@@ -4,6 +4,7 @@
 // Standard includes.
 ////////////////////////////////////////////////////////////////
 
+#include <memory>
 #include <optional>
 #include <tuple>
 #include <vector>
@@ -210,8 +211,9 @@ template<is_tuple Tuple, int64_t Index>
     requires(Index < 0)
 struct tuple_index_wrapped<Tuple, Index>
 {
-    static constexpr size_t value = static_cast<size_t>((static_cast<int64_t>(std::tuple_size_v<Tuple>) +
-        Index % static_cast<int64_t>(std::tuple_size_v<Tuple>)) % static_cast<int64_t>(std::tuple_size_v<Tuple>));
+    static constexpr size_t value = static_cast<size_t>(
+      (static_cast<int64_t>(std::tuple_size_v<Tuple>) + Index % static_cast<int64_t>(std::tuple_size_v<Tuple>)) %
+      static_cast<int64_t>(std::tuple_size_v<Tuple>));
 };
 
 /**
@@ -258,15 +260,13 @@ using tuple_swizzle_t = typename tuple_swizzle<Tuple, Is...>::type;
 ////////////////////////////////////////////////////////////////
 
 template<typename T>
-struct is_vector
+struct is_vector : std::false_type
 {
-    static constexpr bool value = false;
 };
 
 template<typename T>
-struct is_vector<std::vector<T>>
+struct is_vector<std::vector<T>> : std::true_type
 {
-    static constexpr bool value = true;
 };
 
 template<typename T>
@@ -278,23 +278,56 @@ inline constexpr bool is_vector_v = is_vector<T>::value;
 ////////////////////////////////////////////////////////////////
 
 template<typename T>
-struct is_optional
+struct is_optional : std::false_type
 {
-    static constexpr bool value = false;
 };
 
 template<typename T>
-struct is_optional<std::optional<T>>
+struct is_optional<std::optional<T>> : std::true_type
 {
-    static constexpr bool value = true;
 };
 
 template<typename T>
 inline constexpr bool is_optional_v = is_optional<T>::value;
 
 ////////////////////////////////////////////////////////////////
+// std::unique_ptr
+////////////////////////////////////////////////////////////////
+
+template<typename T>
+struct is_unique_ptr : std::false_type
+{
+};
+
+template<typename T, typename D>
+struct is_unique_ptr<std::unique_ptr<T, D>> : std::true_type
+{
+};
+
+template<typename T>
+inline constexpr bool is_unique_ptr_v = is_unique_ptr<std::remove_cvref_t<T>>::value;
+
+////////////////////////////////////////////////////////////////
+// std::shared_ptr
+////////////////////////////////////////////////////////////////
+
+template<typename T>
+struct is_shared_ptr : std::false_type
+{
+};
+
+template<typename T>
+struct is_shared_ptr<std::shared_ptr<T>> : std::true_type
+{
+};
+
+template<typename T>
+inline constexpr bool is_shared_ptr_v = is_shared_ptr<std::remove_cvref_t<T>>::value;
+
+
+////////////////////////////////////////////////////////////////
 // Conversions.
 ////////////////////////////////////////////////////////////////
 
-template <class T, class U>
+template<class T, class U>
 concept explicitly_convertible_to = requires(T t) { static_cast<U>(t); };

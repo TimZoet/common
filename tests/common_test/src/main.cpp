@@ -1,7 +1,21 @@
+////////////////////////////////////////////////////////////////
+// Standard includes.
+////////////////////////////////////////////////////////////////
+
 #include <iostream>
 
-#include "common_test/enum_classes.h"
+////////////////////////////////////////////////////////////////
+// Module includes.
+////////////////////////////////////////////////////////////////
+
 #include "bettertest/run.h"
+
+////////////////////////////////////////////////////////////////
+// Current target includes.
+////////////////////////////////////////////////////////////////
+
+#include "common_test/enum_classes.h"
+#include "common_test/type_traits.h"
 
 #ifdef WIN32
 #include "Windows.h"
@@ -23,5 +37,6 @@ int main(int argc, char** argv)
                    test::EnumClassAnd,
                    test::EnumClassNot,
                    test::EnumClassToIntegral,
-                   test::EnumClassReduction>(argc, argv, "common");
+                   test::EnumClassReduction,
+                   test::TypeTraits>(argc, argv, "common");
 }
