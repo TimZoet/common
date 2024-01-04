@@ -7,11 +7,14 @@ set(SRC_DIR "src")
 
 set(HEADERS
 	${INCLUDE_DIR}/enum_classes.h
+	${INCLUDE_DIR}/type_traits.h
 )
  
 set(SOURCES
-	${SRC_DIR}/enum_classes.cpp
 	${SRC_DIR}/main.cpp
+
+	${SRC_DIR}/enum_classes.cpp
+	${SRC_DIR}/type_traits.cpp
 )
 
 set(DEPS_PRIVATE
